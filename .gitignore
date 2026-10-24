@@ -1,0 +1,21 @@
+# 忽略权重文件
+weights/
+*.ckpt
+*.pth
+*.bin
+
+# 忽略输出图片
+outputs/
+
+# Python 缓存
+__pycache__/
+*.py[cod]
+.vscode/
+
+# 忽略本地的虚拟环境（如果建在项目文件夹里的话）
+venv/
+.idea/
+
+# 忽略刚刚下载的模型缓存文件
+*.mat
+*.zip
