@@ -35,6 +35,16 @@ class SmokeScriptTests(unittest.TestCase):
         self.assertEqual(len(reports), 1)
         return reports[0].parent, json.loads(reports[0].read_text(encoding="utf-8"))
 
+    def test_v2_capacity_checked_before_model_load(self):
+        for option, value in (("--bits", "1" * 15809), ("--bit-length", "15809")):
+            with patch.object(run_core_smoke, "SteganographyCore") as factory:
+                with self.assertRaises(SystemExit) as caught:
+                    self.invoke(self.args(option, value))
+                self.assertEqual(caught.exception.code, 2)
+                factory.assert_not_called()
+        self.assertEqual(list(self.root.glob("run_*")), [])
+        self.assertEqual(len(run_core_smoke._validate_bits("1" * 16352, max_bits=run_core_smoke.LEGACY_MAX_BITS)), 16352)
+
     def test_roundtrip_reopens_png_and_saves_all_outputs(self):
         with patch.object(run_core_smoke, "SteganographyCore") as factory:
             core = factory.return_value

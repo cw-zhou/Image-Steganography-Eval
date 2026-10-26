@@ -1,5 +1,6 @@
 import argparse
 import os
+import torch
 from PIL import Image
 from core.steganography import SteganographyCore
 from evaluation.attacks import apply_attack
@@ -9,10 +10,10 @@ from evaluation.scorer import calculate_final_score
 def run_pipeline(prompt, secret_bits, core, args):
     print(f"\n>>> 开始处理 Prompt: {prompt}")
     
-    # 1. 生成隐写图像
+    # 1. 生成隐写图像，并获取上下文
     stego_image = core.embed(secret_bits, prompt)
+    context = core.get_context()  # 🌟 获取提取所需的 context
     
-    # 确保输出目录存在
     os.makedirs(args.output_dir, exist_ok=True)
     stego_image.save(os.path.join(args.output_dir, "original_stego.png"))
     
@@ -24,9 +25,13 @@ def run_pipeline(prompt, secret_bits, core, args):
         attacked_image = apply_attack(stego_image, attack)
         attacked_image.save(os.path.join(args.output_dir, f"attacked_{attack}.png"))
         
-        # 3. 提取信息
-        extracted_bits = core.extract(attacked_image)
-        
+        # 3. 提取信息（带错误保护，防止一张图失败导致整批崩溃）
+        try:
+            extracted_bits = core.extract(attacked_image, context=context)  # 🌟 传入 context
+        except Exception as e:
+            print(f"[{attack.upper()}] 提取报错: {e}")
+            extracted_bits = "" # 报错返回空串
+            
         # 4. 计算准确率
         acc = calculate_acc(secret_bits, extracted_bits)
         acc_results[attack] = acc
@@ -44,28 +49,18 @@ def run_pipeline(prompt, secret_bits, core, args):
         acc_mblur=acc_results['mblur'], 
         niqe=niqe
     )
-    
     return score
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--ckpt", type=str, required=True, help="SD 1.5 权重路径")
-    parser.add_argument("--clip", type=str, required=True, help="CLIP 权重路径")
-    parser.add_argument("--config", type=str, required=True, help="Baseline ldm.yaml 路径")
-    parser.add_argument("--prompt", type=str, default="A photo of a cat", help="测试 Prompt")
-    parser.add_argument("--bits", type=str, default="10101010", help="待嵌入比特流")
-    parser.add_argument("--output_dir", type=str, default="outputs", help="输出目录")
-    parser.add_argument("--device", type=str, default="cuda" if __import__('torch').cuda.is_available() else "cpu")
-    
+    parser.add_argument("--ckpt", type=str, required=True)
+    parser.add_argument("--clip", type=str, required=True)
+    parser.add_argument("--config", type=str, required=True)
+    parser.add_argument("--prompt", type=str, default="A photo of a cat")
+    parser.add_argument("--bits", type=str, default="10101010")
+    parser.add_argument("--output_dir", type=str, default="outputs")
+    parser.add_argument("--device", type=str, default="cuda" if torch.cuda.is_available() else "cpu")
     args = parser.parse_args()
     
-    # 初始化核心隐写类
-    core = SteganographyCore(
-        model_path=args.ckpt, 
-        clip_path=args.clip, 
-        config_path=args.config,
-        device=args.device
-    )
-    
-    # 跑单条流水线
+    core = SteganographyCore(args.ckpt, args.clip, args.config, device=args.device)
     run_pipeline(args.prompt, args.bits, core, args)

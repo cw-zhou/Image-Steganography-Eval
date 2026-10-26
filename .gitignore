@@ -21,3 +21,8 @@ venv/
 *.zip
 # 项目专用 Python 环境
 .venv/
+
+# Jupyter automatic checkpoints and local backups
+.ipynb_checkpoints/
+/before_*.tar.gz
+/evaluation_backup_*/

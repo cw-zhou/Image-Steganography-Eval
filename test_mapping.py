@@ -85,5 +85,63 @@ class MappingTests(unittest.TestCase):
         self.assertEqual(before[2:], after[2:])
 
 
+
+class ProtectedHeaderTests(unittest.TestCase):
+    def test_corrects_four_errors_in_each_header_column(self):
+        mapping = SecretMapping(packet_version=2)
+        symbols = mapping.bits_to_tensor("01010000")
+        flat = symbols.reshape(-1)
+        header = flat[:mapping.header_bits].reshape(9, 64)
+        # Corrupt four entire copies (256 wrong bits), including length and CRC.
+        header[:4] = 1 - header[:4]
+        self.assertEqual(SecretMapping(packet_version=2).tensor_to_bits(symbols), "01010000")
+
+    def test_soft_header_recovers_despite_five_weak_wrong_votes(self):
+        mapping = SecretMapping(packet_version=2)
+        symbols = mapping.bits_to_tensor("01010000")
+        copies = symbols.reshape(-1)[:mapping.header_bits].reshape(9, 64)
+        expected = copies[0].copy()
+        # Five weak incorrect observations versus four confident correct ones.
+        copies[:5] = np.where(expected == 1, 0.49, 0.51)
+        hard = ((copies > 0.5).sum(axis=0) > 4).astype(np.uint8)
+        self.assertTrue(np.all(hard != expected))
+        self.assertEqual(mapping.tensor_to_bits(symbols), "01010000")
+
+    def test_soft_header_respects_custom_threshold(self):
+        mapping = SecretMapping(packet_version=2)
+        symbols = mapping.bits_to_tensor("01010000")
+        # 0 -> 0.55, 1 -> 0.75: should decode only with the requested threshold.
+        symbols = symbols * 0.2 + 0.55
+        self.assertEqual(mapping.tensor_to_bits(symbols, threshold=0.6), "01010000")
+
+    def test_detects_uncorrectable_header_instead_of_guessing_length(self):
+        mapping = SecretMapping(packet_version=2)
+        symbols = mapping.bits_to_tensor("01010000")
+        header = symbols.reshape(-1)[:mapping.header_bits].reshape(9, 64)
+        # Flip five copies of a low length bit: valid range, but CRC must fail.
+        header[:5, 31] = 1 - header[:5, 31]
+        with self.assertRaisesRegex(ValueError, "校验失败"):
+            mapping.tensor_to_bits(symbols)
+
+    def test_payload_errors_are_returned_not_replaced_with_original(self):
+        mapping = SecretMapping(packet_version=2)
+        symbols = mapping.bits_to_tensor("01010000")
+        symbols.reshape(-1)[mapping.header_bits] = 1
+        self.assertEqual(mapping.tensor_to_bits(symbols), "11010000")
+
+    def test_full_capacity_and_fresh_decoder(self):
+        mapping = SecretMapping(packet_version=2)
+        self.assertEqual(mapping.max_payload_bits, 15808)
+        for message in ("0", "101000", "01" * 7904):
+            with self.subTest(length=len(message)):
+                noise = mapping.encode(message)
+                self.assertEqual(SecretMapping(packet_version=2).decode(noise), message)
+        with self.assertRaises(ValueError):
+            mapping.encode("1" * 15809)
+        for version in (True, 0, 4):
+            with self.assertRaises(ValueError):
+                SecretMapping(packet_version=version)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
