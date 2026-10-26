@@ -19,3 +19,5 @@ venv/
 # 忽略刚刚下载的模型缓存文件
 *.mat
 *.zip
+# 项目专用 Python 环境
+.venv/

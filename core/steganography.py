@@ -1,37 +1,111 @@
+"""组员 A 对外提供的隐写接口；模型计算见 diffusion_backend.py。"""
+
+import math
+from copy import deepcopy
+from typing import Optional
+
 from PIL import Image
-import torch
-# 组员A：需要在这里 import 你从 baseline 里剥离出来的模块
+
+from .diffusion_backend import StableDiffusionBackend
+from .mapping import SecretMapping
+
 
 class SteganographyCore:
-    def __init__(self, model_path, clip_path, config_path, device='cuda'):
-        """
-        初始化隐写模型
-        组员A：在这里加载 SD 1.5 模型、CLIP模型、以及 Baseline 的映射逻辑
-        """
-        self.device = device
-        print(f"[Core] 正在加载模型... 设备: {device}")
-        # TODO: 加载模型的代码
-        pass
+    """消息 -> 初始噪声 -> 图片，以及图片 -> 反演噪声 -> 消息。
+
+    context 只保存提取所需的 prompt 和参数，不保存原文或初始噪声。
+    真实生成需要本地模型文件和完整的 PyTorch/baseline 运行环境。
+    """
+
+    DEFAULT_CONTEXT = {
+        "version": 1,
+        "seed_kernel": 100,
+        "seed_shuffle": 101,
+        "mapping": "ours_mapping",
+        "bits_per_symbol": 1,
+        "width": 512,
+        "height": 512,
+        "guidance_scale": 5.0,
+        "generation_steps": 20,
+        "inversion_steps": 20,
+        "dpm_order": 2,
+        "ddim_eta": 0.0,
+    }
+
+    def __init__(self, model_path, clip_path, config_path, device="cuda"):
+        self.device = str(device)
+        self._context = None
+        self._backend = StableDiffusionBackend(
+            model_path, clip_path, config_path, device=self.device
+        )
+
+    @classmethod
+    def _validate_context(cls, context: dict) -> dict:
+        if not isinstance(context, dict):
+            raise TypeError("context 必须是字典")
+        expected = set(cls.DEFAULT_CONTEXT) | {"prompt"}
+        if set(context) != expected:
+            raise ValueError("context 字段不完整或包含未支持的字段")
+        result = deepcopy(context)
+        if not isinstance(result["prompt"], str) or not result["prompt"].strip():
+            raise ValueError("prompt 必须是非空字符串")
+        for name, expected_value in (
+            ("version", 1), ("mapping", "ours_mapping"),
+            ("bits_per_symbol", 1), ("width", 512), ("height", 512),
+        ):
+            if type(result[name]) is not type(expected_value) or result[name] != expected_value:
+                raise ValueError("不支持的 context 参数：{}".format(name))
+        for name in ("seed_kernel", "seed_shuffle"):
+            if type(result[name]) is not int or not 0 <= result[name] < 2 ** 32:
+                raise ValueError("{} 必须是 32 位无符号整数".format(name))
+        if type(result["dpm_order"]) is not int or result["dpm_order"] not in (1, 2, 3):
+            raise ValueError("dpm_order 必须为 1、2 或 3")
+        for name in ("generation_steps", "inversion_steps"):
+            if type(result[name]) is not int or result[name] < result["dpm_order"]:
+                raise ValueError("{} 必须为不小于 dpm_order 的整数".format(name))
+        scale = result["guidance_scale"]
+        if type(scale) not in (int, float) or not math.isfinite(scale) or scale < 0:
+            raise ValueError("guidance_scale 必须为有限的非负数")
+        eta = result["ddim_eta"]
+        if type(eta) not in (int, float) or not math.isfinite(eta) or eta != 0:
+            raise ValueError("当前仅支持 ddim_eta=0")
+        return result
+
+    @staticmethod
+    def _mapping(context: dict) -> SecretMapping:
+        return SecretMapping(
+            seed_kernel=context["seed_kernel"], seed_shuffle=context["seed_shuffle"]
+        )
 
     def embed(self, secret_bits: str, prompt: str) -> Image.Image:
-        """
-        嵌入算法
-        :param secret_bits: 二进制字符串，如 "0101101..." (建议A先规定一个固定长度比如256)
-        :param prompt: 文本提示词
-        :return: 生成的隐写图像 (PIL.Image格式)
-        """
-        print(f"[Core] 开始嵌入信息... (长度: {len(secret_bits)}, Prompt: {prompt})")
-        # TODO: 组员A实现：字符串转张量 -> 喂给扩散模型 -> 生成图像
-        # 暂时返回个空白假图占位
-        return Image.new('RGB', (512, 512), color='white')
+        """嵌入 1～16352 位信息，返回 RGB、512×512 的载密图片。
 
-    def extract(self, image: Image.Image) -> str:
+        只有成功生成图片后才更新最近一次 context。
         """
-        提取算法
-        :param image: 可能是原图，也可能是经过攻击的图
-        :return: 提取出的二进制字符串
-        """
-        print("[Core] 开始提取信息...")
-        # TODO: 组员A实现：图像转张量 -> 提取特征 -> 通过阈值转回字符串
-        # 暂时返回与 embed 长度一致的随机占位比特
-        return "".join(["0" if i % 2 == 0 else "1" for i in range(256)])
+        context = dict(self.DEFAULT_CONTEXT, prompt=prompt)
+        context = self._validate_context(context)
+        init_noise = self._mapping(context).encode(secret_bits)
+        image = self._backend.generate(init_noise, context)
+        if not isinstance(image, Image.Image) or image.mode != "RGB" or image.size != (512, 512):
+            raise RuntimeError("模型后端必须返回 RGB、512×512 的 PIL 图片")
+        self._context = deepcopy(context)
+        return image
+
+    def extract(self, image: Image.Image, *, context: Optional[dict] = None) -> str:
+        """从图片反演并恢复信息；可显式传入这张图片对应的 context。"""
+        if not isinstance(image, Image.Image):
+            raise TypeError("image 必须是 PIL.Image.Image")
+        if image.size != (512, 512):
+            raise ValueError("当前仅支持 512×512 图片，不会自动缩放")
+        if context is None:
+            context = self.get_context()
+        context = self._validate_context(context)
+        pred_noise = self._backend.invert(image.convert("RGB"), context)
+        # 从图像反演结果解码；没有读取原始消息的捷径。
+        return self._mapping(context).decode(pred_noise)
+
+    def get_context(self) -> dict:
+        """返回可用 JSON 保存的辅助信息副本。"""
+        if self._context is None:
+            raise RuntimeError("当前没有提取上下文，请先 embed，或给 extract 显式传入 context")
+        return deepcopy(self._context)
