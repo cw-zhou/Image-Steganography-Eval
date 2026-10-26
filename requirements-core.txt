@@ -1,0 +1,17 @@
+# 模型运行环境候选版本；在 GPU 服务器验证，当前本地不安装。
+# 先按照 PyTorch 官方说明安装对应 CUDA 构建，再安装本文件。
+torch==2.1.0
+torchvision==0.16.0
+numpy==1.24.4
+scipy==1.10.1
+Pillow==10.4.0
+pytorch-lightning==1.9.5
+torchmetrics==0.11.4
+einops==0.6.1
+omegaconf==2.3.0
+transformers==4.30.2
+huggingface-hub==0.23.5
+matplotlib==3.7.5
+tqdm==4.66.5
+# 原版 baseline 的 robust_eval.py 需要 OpenCV。
+opencv-python==4.8.1.78
