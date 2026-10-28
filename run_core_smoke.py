@@ -18,7 +18,8 @@ from core.steganography import SteganographyCore
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent
-MAX_BITS = 4 * 64 * 64 - SecretMapping.HEADER_BITS
+LEGACY_MAX_BITS = 4 * 64 * 64 - SecretMapping.HEADER_BITS
+MAX_BITS = 4 * 64 * 64 - SecretMapping.PROTECTED_HEADER_BITS
 
 
 def build_parser():
@@ -41,17 +42,17 @@ def build_parser():
     return parser
 
 
-def _validate_bits(bits):
+def _validate_bits(bits, max_bits=MAX_BITS):
     if not bits or any(bit not in "01" for bit in bits):
         raise ValueError("秘密信息必须是非空的 0/1 字符串")
-    if len(bits) > MAX_BITS:
-        raise ValueError("单张图最多支持 {} 个原始消息比特".format(MAX_BITS))
+    if len(bits) > max_bits:
+        raise ValueError("单张图最多支持 {} 个原始消息比特".format(max_bits))
     return bits
 
 
-def _bits_file(path):
+def _bits_file(path, max_bits=MAX_BITS):
     # 允许文件首尾换行，不删除消息内部的空白或非法字符。
-    return _validate_bits(path.read_text(encoding="utf-8-sig").strip())
+    return _validate_bits(path.read_text(encoding="utf-8-sig").strip(), max_bits=max_bits)
 
 
 def _roundtrip_bits(args):
@@ -182,7 +183,7 @@ def main(argv=None):
         # 评分参考只在提取完成后读取，不传给模型或 extract。
         report["stage"] = "compare"
         if args.mode == "extract" and args.reference_bits_file is not None:
-            secret = _bits_file(args.reference_bits_file)
+            secret = _bits_file(args.reference_bits_file, max_bits=LEGACY_MAX_BITS)
         if secret is None:
             report.update(status="ok", acc=None, exact_match=None, bpp=None)
             print("Extraction completed; no reference was provided, so accuracy is unknown.", flush=True)

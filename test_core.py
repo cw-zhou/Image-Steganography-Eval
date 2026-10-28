@@ -27,21 +27,21 @@ class CoreInterfaceTests(unittest.TestCase):
     def test_embed_passes_message_as_noise_and_returns_pil(self):
         image = self.core.embed("01011000", "a photo of a cat")
         noise, context = self.backend.generate.call_args.args
-        self.assertEqual(SecretMapping().decode(noise), "01011000")
+        self.assertEqual(SecretMapping(packet_version=2).decode(noise), "01011000")
         self.assertEqual(context["prompt"], "a photo of a cat")
         self.assertIs(image, self.backend.generate.return_value)
         self.assertEqual(set(self.core.get_context()), set(SteganographyCore.DEFAULT_CONTEXT) | {"prompt"})
 
     def test_extract_reads_backend_output_instead_of_original_message(self):
         image = self.core.embed("11111111", "a cat")
-        self.backend.invert.return_value = SecretMapping().encode("001000")
+        self.backend.invert.return_value = SecretMapping(packet_version=2).encode("001000")
         self.assertEqual(self.core.extract(image), "001000")
         self.assertEqual(self.backend.invert.call_args.args[1]["prompt"], "a cat")
 
     def test_context_survives_json_and_can_be_used_by_fresh_instance(self):
         image = self.core.embed("0100", "a cat")
         context = json.loads(json.dumps(self.core.get_context()))
-        self.backend.invert.return_value = SecretMapping().encode("0100")
+        self.backend.invert.return_value = SecretMapping(packet_version=2).encode("0100")
         fresh = SteganographyCore("unused.ckpt", "unused_clip", "unused.yaml", device="cpu")
         self.assertEqual(fresh.extract(image, context=context), "0100")
         with self.assertRaises(RuntimeError):
@@ -51,7 +51,7 @@ class CoreInterfaceTests(unittest.TestCase):
         image = self.core.embed("01", "a cat")
         cat_context = self.core.get_context()
         self.core.embed("10", "a dog")
-        self.backend.invert.return_value = SecretMapping().encode("01")
+        self.backend.invert.return_value = SecretMapping(packet_version=2).encode("01")
         self.core.extract(image, context=cat_context)
         self.assertEqual(self.backend.invert.call_args.args[1]["prompt"], "a cat")
         self.assertEqual(self.core.get_context()["prompt"], "a dog")
@@ -90,6 +90,19 @@ class CoreInterfaceTests(unittest.TestCase):
         self.backend.generate.return_value = Image.new("RGB", (256, 256))
         with self.assertRaises(RuntimeError):
             self.core.embed("01", "a dog")
+
+
+    def test_legacy_context_still_decodes_old_images(self):
+        context = dict(self.core.DEFAULT_CONTEXT, prompt="legacy", version=1)
+        self.backend.invert.return_value = SecretMapping(packet_version=1).encode("00100")
+        image = Image.new("RGB", (512, 512))
+        self.assertEqual(self.core.extract(image, context=context), "00100")
+
+    def test_unsupported_version_is_rejected(self):
+        context = dict(self.core.DEFAULT_CONTEXT, prompt="test", version=4)
+        with self.assertRaises(ValueError):
+            self.core.extract(Image.new("RGB", (512, 512)), context=context)
+        self.backend.invert.assert_not_called()
 
 
 class ImageAndLoaderTests(unittest.TestCase):

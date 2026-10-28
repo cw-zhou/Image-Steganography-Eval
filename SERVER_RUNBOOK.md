@@ -191,7 +191,7 @@ python run_core_smoke.py \
 不提供 `--bits` 时，默认生成 256 位测试消息；也可用 `--bit-length 1024 --seed 42`。
 `--seed` 仅控制测试消息，不保证随机填充和整个生成过程逐像素复现。
 `--bits-file message.txt` 可读取消息文件；该选项与 `--bits`、`--bit-length` 互斥。
-当前支持 1～16352 位原始消息，32 位长度头和填充不计入 bpp。
+新嵌入使用 context.version=2，支持 1～15808 位原始消息；576 位冗余长度头和填充不计入 bpp。旧 version=1 图片仍需使用原 context 解码。
 
 每次运行会打印一个独立目录，不覆盖旧实验：
 
