@@ -1,0 +1,57 @@
+{
+  "status": "complete_with_failures",
+  "complete_100_pairs": true,
+  "planned_method_cases": 200,
+  "completed_method_cases": 200,
+  "methods": {
+    "baseline": {
+      "cases": 100,
+      "mean_acc_including_failures": {
+        "clean": 0.9800396728515625,
+        "jpeg": 0.9190374755859375,
+        "awgn": 0.8448760986328125,
+        "mblur": 0.8919482421875
+      },
+      "extraction_failures": {
+        "clean": 0,
+        "jpeg": 0,
+        "awgn": 0,
+        "mblur": 0
+      },
+      "mean_metrics": {
+        "bpp": 0.0625,
+        "acc_jpeg": 0.9190374755859375,
+        "acc_awgn": 0.8448760986328125,
+        "acc_mblur": 0.8919482421875,
+        "niqe": 3.6234135882265734
+      },
+      "provisional_score": 74.06020201267955,
+      "niqe_complete": true
+    },
+    "payload_ecc": {
+      "cases": 100,
+      "mean_acc_including_failures": {
+        "clean": 0.99814697265625,
+        "jpeg": 0.942269287109375,
+        "awgn": 0.8210498046875,
+        "mblur": 0.919224853515625
+      },
+      "extraction_failures": {
+        "clean": 0,
+        "jpeg": 0,
+        "awgn": 5,
+        "mblur": 0
+      },
+      "mean_metrics": {
+        "bpp": 0.03125,
+        "acc_jpeg": 0.942269287109375,
+        "acc_awgn": 0.8210498046875,
+        "acc_mblur": 0.919224853515625,
+        "niqe": 3.595258978315511
+      },
+      "provisional_score": 72.1202103733867,
+      "niqe_complete": true
+    }
+  },
+  "scope": "Project-selected frozen COCO-caption evaluation. Different capacities: baseline16384, ECC8192. Not instructor-supplied data."
+}

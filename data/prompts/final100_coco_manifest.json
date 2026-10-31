@@ -1,0 +1,631 @@
+{
+  "created_date": "2026-10-31",
+  "scope": "Project-selected new prompt evaluation, not instructor-provided data or proof of being unseen in SD training.",
+  "source_name": "COCO Karpathy test captions as distributed by Salesforce BLIP",
+  "source_url": "https://storage.googleapis.com/sfr-vision-language-research/datasets/coco_karpathy_test.json",
+  "source_documentation": "https://github.com/salesforce/BLIP/blob/main/data/coco_karpathy_dataset.py",
+  "source_sha256": "5b202a235ee2a4e13f82b984ef9293b8e2d34f9b1f92147bf8340580f20faf15",
+  "source_records": 5000,
+  "candidate_rule": "Use first nonempty caption per source image, collapse whitespace, exact casefold deduplication. Exclude known project evaluation/development prompt texts. No quality or topic selection.",
+  "excluded_previous_prompt_records": 0,
+  "eligible_pool": 4968,
+  "sample_seed": 2026103101,
+  "sample_count": 100,
+  "sampling": "random.Random(sample_seed).sample(pool,100), without replacement; retain sampled order.",
+  "prompt_sha256": "332419b39ada7bd659181c038df5d0a2282521da1f54f8c9670edda184f3b680",
+  "generation_seed_start": 20261101,
+  "methods": [
+    "baseline",
+    "payload_ecc"
+  ],
+  "baseline_payload_bits": 16384,
+  "candidate_payload_bits": 8192,
+  "frozen_candidate_sha256": {
+    "sparse_payload_code.py": "b180e64ac16d919f4ae4b3e8abb65be8b625b997ec91de76c76e1a8780669689",
+    "ecc_payload_candidate.py": "1d83c9df7065ec6528ed425091c514d19fd979483bc806dae29b8b925aa68729"
+  },
+  "policy": "Freeze before generated-image outcomes. Use same prompts/settings for both methods, include every failure, do not swap unfavorable cases. Any subsequent tuning makes these development data. Exact text disjointness does not imply semantic disjointness or independence from model training.",
+  "frozen_before_model_evaluation": true,
+  "selected": [
+    {
+      "source_record_index": 3952,
+      "image_id": "val2014/COCO_val2014_000000367018.jpg",
+      "caption_index": 0,
+      "prompt": "These clams on the half shell are a seafood staple."
+    },
+    {
+      "source_record_index": 1718,
+      "image_id": "val2014/COCO_val2014_000000240387.jpg",
+      "caption_index": 0,
+      "prompt": "a lady that is just about nake that is outside"
+    },
+    {
+      "source_record_index": 311,
+      "image_id": "val2014/COCO_val2014_000000471497.jpg",
+      "caption_index": 0,
+      "prompt": "a small elephant walks in a lush forest"
+    },
+    {
+      "source_record_index": 4988,
+      "image_id": "val2014/COCO_val2014_000000130524.jpg",
+      "caption_index": 0,
+      "prompt": "a table covered wtih two taptops and a phone and assorted accessories"
+    },
+    {
+      "source_record_index": 4061,
+      "image_id": "val2014/COCO_val2014_000000432547.jpg",
+      "caption_index": 0,
+      "prompt": "A man at a table rolling out wrapping paper."
+    },
+    {
+      "source_record_index": 4945,
+      "image_id": "val2014/COCO_val2014_000000033753.jpg",
+      "caption_index": 0,
+      "prompt": "A wooden park bench with a remote control on top of it."
+    },
+    {
+      "source_record_index": 2784,
+      "image_id": "val2014/COCO_val2014_000000542625.jpg",
+      "caption_index": 0,
+      "prompt": "A bird sits on a parking meter with several parked cars in the street."
+    },
+    {
+      "source_record_index": 4904,
+      "image_id": "val2014/COCO_val2014_000000097693.jpg",
+      "caption_index": 0,
+      "prompt": "A view of a bed, chair, and window treatments."
+    },
+    {
+      "source_record_index": 2233,
+      "image_id": "val2014/COCO_val2014_000000009217.jpg",
+      "caption_index": 0,
+      "prompt": "A clock tower sits on top of an old building."
+    },
+    {
+      "source_record_index": 872,
+      "image_id": "val2014/COCO_val2014_000000534121.jpg",
+      "caption_index": 0,
+      "prompt": "A couch and a chair in a small room."
+    },
+    {
+      "source_record_index": 4691,
+      "image_id": "val2014/COCO_val2014_000000369243.jpg",
+      "caption_index": 0,
+      "prompt": "An old ornate clock face set in a brick building."
+    },
+    {
+      "source_record_index": 4340,
+      "image_id": "val2014/COCO_val2014_000000034900.jpg",
+      "caption_index": 0,
+      "prompt": "A man has stopped in the middle of the street and his hands are full."
+    },
+    {
+      "source_record_index": 2180,
+      "image_id": "val2014/COCO_val2014_000000265742.jpg",
+      "caption_index": 0,
+      "prompt": "There is no image here to provide a caption for."
+    },
+    {
+      "source_record_index": 1926,
+      "image_id": "val2014/COCO_val2014_000000287469.jpg",
+      "caption_index": 0,
+      "prompt": "A zombee walking down a street covered in blood."
+    },
+    {
+      "source_record_index": 1740,
+      "image_id": "val2014/COCO_val2014_000000209747.jpg",
+      "caption_index": 0,
+      "prompt": "A gray and white kitten sitting in a bathroom sink."
+    },
+    {
+      "source_record_index": 576,
+      "image_id": "val2014/COCO_val2014_000000148188.jpg",
+      "caption_index": 0,
+      "prompt": "A LOT OF PEOPLE ARE RIDING ON THE ELEPHANT"
+    },
+    {
+      "source_record_index": 3268,
+      "image_id": "val2014/COCO_val2014_000000531622.jpg",
+      "caption_index": 0,
+      "prompt": "A very neatly kept retro 1969s looking living room set."
+    },
+    {
+      "source_record_index": 2432,
+      "image_id": "val2014/COCO_val2014_000000288202.jpg",
+      "caption_index": 0,
+      "prompt": "A polar bear laying on a large stack of ice."
+    },
+    {
+      "source_record_index": 4974,
+      "image_id": "val2014/COCO_val2014_000000553788.jpg",
+      "caption_index": 0,
+      "prompt": "there is a woman laying in a bed using a lap top"
+    },
+    {
+      "source_record_index": 1465,
+      "image_id": "val2014/COCO_val2014_000000534162.jpg",
+      "caption_index": 0,
+      "prompt": "Two girls are sitting on a couch looking at cellphones."
+    },
+    {
+      "source_record_index": 4827,
+      "image_id": "val2014/COCO_val2014_000000466156.jpg",
+      "caption_index": 0,
+      "prompt": "The striped cat is sitting on top of the car."
+    },
+    {
+      "source_record_index": 4575,
+      "image_id": "val2014/COCO_val2014_000000009236.jpg",
+      "caption_index": 0,
+      "prompt": "A kitchen with a black automatic dishwasher next to a doorway."
+    },
+    {
+      "source_record_index": 2429,
+      "image_id": "val2014/COCO_val2014_000000407943.jpg",
+      "caption_index": 0,
+      "prompt": "A man walking in front of an open umbrella."
+    },
+    {
+      "source_record_index": 2855,
+      "image_id": "val2014/COCO_val2014_000000516416.jpg",
+      "caption_index": 0,
+      "prompt": "A woman with a racket stands on a court."
+    },
+    {
+      "source_record_index": 2121,
+      "image_id": "val2014/COCO_val2014_000000535313.jpg",
+      "caption_index": 0,
+      "prompt": "A white table holding various trays of food and fruit."
+    },
+    {
+      "source_record_index": 4360,
+      "image_id": "val2014/COCO_val2014_000000388487.jpg",
+      "caption_index": 0,
+      "prompt": "A patch of wild flowers growing next to a stop sign."
+    },
+    {
+      "source_record_index": 459,
+      "image_id": "val2014/COCO_val2014_000000051540.jpg",
+      "caption_index": 0,
+      "prompt": "A pile of fresh produce sitting inside of a store under a scale."
+    },
+    {
+      "source_record_index": 2492,
+      "image_id": "val2014/COCO_val2014_000000488723.jpg",
+      "caption_index": 0,
+      "prompt": "A vase of red roses are sitting on a table."
+    },
+    {
+      "source_record_index": 2034,
+      "image_id": "val2014/COCO_val2014_000000095161.jpg",
+      "caption_index": 0,
+      "prompt": "A lot of blue and yellow umbrellas sitting under a clock."
+    },
+    {
+      "source_record_index": 3014,
+      "image_id": "val2014/COCO_val2014_000000187610.jpg",
+      "caption_index": 0,
+      "prompt": "A giraffe is standing between two trees and some rocks."
+    },
+    {
+      "source_record_index": 1904,
+      "image_id": "val2014/COCO_val2014_000000516143.jpg",
+      "caption_index": 0,
+      "prompt": "a green and white bus is on the street"
+    },
+    {
+      "source_record_index": 522,
+      "image_id": "val2014/COCO_val2014_000000251590.jpg",
+      "caption_index": 0,
+      "prompt": "A very big pretty green vase with some flowers."
+    },
+    {
+      "source_record_index": 2122,
+      "image_id": "val2014/COCO_val2014_000000013220.jpg",
+      "caption_index": 0,
+      "prompt": "A family sitting at a dinner table with bowls of soup."
+    },
+    {
+      "source_record_index": 3667,
+      "image_id": "val2014/COCO_val2014_000000096633.jpg",
+      "caption_index": 0,
+      "prompt": "A brown bear sitting up against a tree on a green grass covered field."
+    },
+    {
+      "source_record_index": 1535,
+      "image_id": "val2014/COCO_val2014_000000348669.jpg",
+      "caption_index": 0,
+      "prompt": "a brown bear is digging in the ground for something"
+    },
+    {
+      "source_record_index": 2470,
+      "image_id": "val2014/COCO_val2014_000000234499.jpg",
+      "caption_index": 0,
+      "prompt": "A pita pizza fills up an entire plate on a table."
+    },
+    {
+      "source_record_index": 2755,
+      "image_id": "val2014/COCO_val2014_000000410855.jpg",
+      "caption_index": 0,
+      "prompt": "Long line of cards on a busy street at night."
+    },
+    {
+      "source_record_index": 1845,
+      "image_id": "val2014/COCO_val2014_000000495985.jpg",
+      "caption_index": 0,
+      "prompt": "A woman with ear protection on swings a bat."
+    },
+    {
+      "source_record_index": 4111,
+      "image_id": "val2014/COCO_val2014_000000475150.jpg",
+      "caption_index": 0,
+      "prompt": "A giraffe stands near a tree in the wilderness."
+    },
+    {
+      "source_record_index": 3128,
+      "image_id": "val2014/COCO_val2014_000000353536.jpg",
+      "caption_index": 0,
+      "prompt": "A table topped with plates and glasses with eating utensils.."
+    },
+    {
+      "source_record_index": 4012,
+      "image_id": "val2014/COCO_val2014_000000177861.jpg",
+      "caption_index": 0,
+      "prompt": "Pedestrians walking on sidewalk with umbrella on rainy day."
+    },
+    {
+      "source_record_index": 2703,
+      "image_id": "val2014/COCO_val2014_000000497334.jpg",
+      "caption_index": 0,
+      "prompt": "An open book sitting on top of a blanket covered bed."
+    },
+    {
+      "source_record_index": 2632,
+      "image_id": "val2014/COCO_val2014_000000504074.jpg",
+      "caption_index": 0,
+      "prompt": "Women that are sitting outside on a patio area and smoking cigarettes."
+    },
+    {
+      "source_record_index": 5,
+      "image_id": "val2014/COCO_val2014_000000223648.jpg",
+      "caption_index": 0,
+      "prompt": "Multiple wooden spoons are shown on a table top."
+    },
+    {
+      "source_record_index": 4342,
+      "image_id": "val2014/COCO_val2014_000000331223.jpg",
+      "caption_index": 0,
+      "prompt": "The red fire hydrant is next to a caution partition."
+    },
+    {
+      "source_record_index": 2416,
+      "image_id": "val2014/COCO_val2014_000000125072.jpg",
+      "caption_index": 0,
+      "prompt": "Cattle grazing on grass near a lake surrounded by mountain.."
+    },
+    {
+      "source_record_index": 3355,
+      "image_id": "val2014/COCO_val2014_000000453903.jpg",
+      "caption_index": 0,
+      "prompt": "A luggage carousel at an airport surrounded by luggage."
+    },
+    {
+      "source_record_index": 1536,
+      "image_id": "val2014/COCO_val2014_000000249623.jpg",
+      "caption_index": 0,
+      "prompt": "A black bear walking through a path in the woods."
+    },
+    {
+      "source_record_index": 363,
+      "image_id": "val2014/COCO_val2014_000000355228.jpg",
+      "caption_index": 0,
+      "prompt": "A small white mouse sleeping on top of a remote control."
+    },
+    {
+      "source_record_index": 1820,
+      "image_id": "val2014/COCO_val2014_000000499200.jpg",
+      "caption_index": 0,
+      "prompt": "A surfer is in the middle of riding a wave."
+    },
+    {
+      "source_record_index": 1510,
+      "image_id": "val2014/COCO_val2014_000000270386.jpg",
+      "caption_index": 0,
+      "prompt": "The black street pole has three different signs on it."
+    },
+    {
+      "source_record_index": 4199,
+      "image_id": "val2014/COCO_val2014_000000407260.jpg",
+      "caption_index": 0,
+      "prompt": "A young woman holding a gun on a stove top oven sitting in a field."
+    },
+    {
+      "source_record_index": 796,
+      "image_id": "val2014/COCO_val2014_000000178761.jpg",
+      "caption_index": 0,
+      "prompt": "A dog and a goat with their noses touching at fence."
+    },
+    {
+      "source_record_index": 1778,
+      "image_id": "val2014/COCO_val2014_000000429063.jpg",
+      "caption_index": 0,
+      "prompt": "A woman standing in front of a bench covered in luggage."
+    },
+    {
+      "source_record_index": 4120,
+      "image_id": "val2014/COCO_val2014_000000253755.jpg",
+      "caption_index": 0,
+      "prompt": "A lake with a rail bridge and traffic bridge over it."
+    },
+    {
+      "source_record_index": 2473,
+      "image_id": "val2014/COCO_val2014_000000174511.jpg",
+      "caption_index": 0,
+      "prompt": "A computer monitor sitting on top of a wooden desk."
+    },
+    {
+      "source_record_index": 3238,
+      "image_id": "val2014/COCO_val2014_000000484303.jpg",
+      "caption_index": 0,
+      "prompt": "CARTOON DEPICTION OF A SNOW SKIER GOING DOWN THE SLOPES"
+    },
+    {
+      "source_record_index": 2187,
+      "image_id": "val2014/COCO_val2014_000000280705.jpg",
+      "caption_index": 0,
+      "prompt": "A photographer setting up his equipment for a photo shoot."
+    },
+    {
+      "source_record_index": 1556,
+      "image_id": "val2014/COCO_val2014_000000532855.jpg",
+      "caption_index": 0,
+      "prompt": "A man grinding his skateboard on a rail."
+    },
+    {
+      "source_record_index": 1870,
+      "image_id": "val2014/COCO_val2014_000000179921.jpg",
+      "caption_index": 0,
+      "prompt": "A bathroom has a floating toilet and sink and a walk-in shower."
+    },
+    {
+      "source_record_index": 1857,
+      "image_id": "val2014/COCO_val2014_000000262262.jpg",
+      "caption_index": 0,
+      "prompt": "A tall tower with a clock stands above a winter sky."
+    },
+    {
+      "source_record_index": 2323,
+      "image_id": "val2014/COCO_val2014_000000290948.jpg",
+      "caption_index": 0,
+      "prompt": "Two people on a ski slope with snow boards on their feet."
+    },
+    {
+      "source_record_index": 600,
+      "image_id": "val2014/COCO_val2014_000000036238.jpg",
+      "caption_index": 0,
+      "prompt": "A pot full of beef and broccoli stew."
+    },
+    {
+      "source_record_index": 3188,
+      "image_id": "val2014/COCO_val2014_000000259382.jpg",
+      "caption_index": 0,
+      "prompt": "Giraffe inside rock walls standing and bowing its head."
+    },
+    {
+      "source_record_index": 247,
+      "image_id": "val2014/COCO_val2014_000000234251.jpg",
+      "caption_index": 0,
+      "prompt": "A young child holding a Nintendo Wii game controller."
+    },
+    {
+      "source_record_index": 1202,
+      "image_id": "val2014/COCO_val2014_000000576566.jpg",
+      "caption_index": 0,
+      "prompt": "A person on a skateboard does an air trick."
+    },
+    {
+      "source_record_index": 430,
+      "image_id": "val2014/COCO_val2014_000000315128.jpg",
+      "caption_index": 0,
+      "prompt": "there is a large concrete sign small buildings behind it"
+    },
+    {
+      "source_record_index": 3977,
+      "image_id": "val2014/COCO_val2014_000000515531.jpg",
+      "caption_index": 0,
+      "prompt": "An airplane flying over a big harvest moon"
+    },
+    {
+      "source_record_index": 623,
+      "image_id": "val2014/COCO_val2014_000000026584.jpg",
+      "caption_index": 0,
+      "prompt": "A Nintendo Wii game console box sitting on a table."
+    },
+    {
+      "source_record_index": 2227,
+      "image_id": "val2014/COCO_val2014_000000149150.jpg",
+      "caption_index": 0,
+      "prompt": "A beautiful woman looking over a mans shoulder in front of a computer."
+    },
+    {
+      "source_record_index": 3464,
+      "image_id": "val2014/COCO_val2014_000000382089.jpg",
+      "caption_index": 0,
+      "prompt": "A fire box with \"ME\" painted on the side."
+    },
+    {
+      "source_record_index": 167,
+      "image_id": "val2014/COCO_val2014_000000410428.jpg",
+      "caption_index": 0,
+      "prompt": "A herd of sheep are grazing in a green field."
+    },
+    {
+      "source_record_index": 450,
+      "image_id": "val2014/COCO_val2014_000000412813.jpg",
+      "caption_index": 0,
+      "prompt": "a big umbrella sitting on the beach"
+    },
+    {
+      "source_record_index": 543,
+      "image_id": "val2014/COCO_val2014_000000468933.jpg",
+      "caption_index": 0,
+      "prompt": "A large herd of sheep are walking behind a wire fence."
+    },
+    {
+      "source_record_index": 2318,
+      "image_id": "val2014/COCO_val2014_000000257965.jpg",
+      "caption_index": 0,
+      "prompt": "Someone doing a trick in the air on their snow board."
+    },
+    {
+      "source_record_index": 789,
+      "image_id": "val2014/COCO_val2014_000000175024.jpg",
+      "caption_index": 0,
+      "prompt": "A person sits on top of a motorcycle with a stuffed toy."
+    },
+    {
+      "source_record_index": 464,
+      "image_id": "val2014/COCO_val2014_000000503595.jpg",
+      "caption_index": 0,
+      "prompt": "A piece of meat on a plate next to broccoli."
+    },
+    {
+      "source_record_index": 3113,
+      "image_id": "val2014/COCO_val2014_000000429593.jpg",
+      "caption_index": 0,
+      "prompt": "A den with a television, compact discs, dvds and a couch."
+    },
+    {
+      "source_record_index": 49,
+      "image_id": "val2014/COCO_val2014_000000109005.jpg",
+      "caption_index": 0,
+      "prompt": "An elephant and a rhinoceros stand not far from each other."
+    },
+    {
+      "source_record_index": 2522,
+      "image_id": "val2014/COCO_val2014_000000456611.jpg",
+      "caption_index": 0,
+      "prompt": "A damaged sign that says \"STATE LAW YIELD TO PEDESTRIANS WITHIN CROSSWALK.\""
+    },
+    {
+      "source_record_index": 196,
+      "image_id": "val2014/COCO_val2014_000000177015.jpg",
+      "caption_index": 0,
+      "prompt": "A man using his laptop computer while a cat sits on his lap."
+    },
+    {
+      "source_record_index": 1901,
+      "image_id": "val2014/COCO_val2014_000000146855.jpg",
+      "caption_index": 0,
+      "prompt": "A girl hanging on a street light pole that has quite a few lights on it."
+    },
+    {
+      "source_record_index": 1974,
+      "image_id": "val2014/COCO_val2014_000000479948.jpg",
+      "caption_index": 0,
+      "prompt": "a baseball game with the batter catcher and umpire"
+    },
+    {
+      "source_record_index": 3445,
+      "image_id": "val2014/COCO_val2014_000000310611.jpg",
+      "caption_index": 0,
+      "prompt": "A giraffe standing inside of a cage near a building."
+    },
+    {
+      "source_record_index": 2242,
+      "image_id": "val2014/COCO_val2014_000000025014.jpg",
+      "caption_index": 0,
+      "prompt": "A standing toilet sitting inside of a bathroom stall."
+    },
+    {
+      "source_record_index": 3798,
+      "image_id": "val2014/COCO_val2014_000000476065.jpg",
+      "caption_index": 0,
+      "prompt": "A woman in a coffee shop using a laptop at a table"
+    },
+    {
+      "source_record_index": 1140,
+      "image_id": "val2014/COCO_val2014_000000355370.jpg",
+      "caption_index": 0,
+      "prompt": "A large passenger jet sitting on top of a runway."
+    },
+    {
+      "source_record_index": 1645,
+      "image_id": "val2014/COCO_val2014_000000123415.jpg",
+      "caption_index": 0,
+      "prompt": "An elephant standing next to a smaller elephant."
+    },
+    {
+      "source_record_index": 707,
+      "image_id": "val2014/COCO_val2014_000000303267.jpg",
+      "caption_index": 0,
+      "prompt": "two horses in a field with a mountain in the background"
+    },
+    {
+      "source_record_index": 807,
+      "image_id": "val2014/COCO_val2014_000000085562.jpg",
+      "caption_index": 0,
+      "prompt": "A blurry image of a dark colored bus at a bus stop."
+    },
+    {
+      "source_record_index": 2831,
+      "image_id": "val2014/COCO_val2014_000000103491.jpg",
+      "caption_index": 0,
+      "prompt": "The man is skiing alone on the snow"
+    },
+    {
+      "source_record_index": 1885,
+      "image_id": "val2014/COCO_val2014_000000019443.jpg",
+      "caption_index": 0,
+      "prompt": "a motorcycle is hanging in the air with plants on it"
+    },
+    {
+      "source_record_index": 1706,
+      "image_id": "val2014/COCO_val2014_000000342800.jpg",
+      "caption_index": 0,
+      "prompt": "A crowd of people flying kites over a field."
+    },
+    {
+      "source_record_index": 960,
+      "image_id": "val2014/COCO_val2014_000000057843.jpg",
+      "caption_index": 0,
+      "prompt": "some dessert is laying out on a yellow and white plate"
+    },
+    {
+      "source_record_index": 4661,
+      "image_id": "val2014/COCO_val2014_000000144874.jpg",
+      "caption_index": 0,
+      "prompt": "a woman surfing as a man comes to join her"
+    },
+    {
+      "source_record_index": 2200,
+      "image_id": "val2014/COCO_val2014_000000113905.jpg",
+      "caption_index": 0,
+      "prompt": "A plate that has four hotdogs and buns with a bottle of ketchup and mustard next to it."
+    },
+    {
+      "source_record_index": 2176,
+      "image_id": "val2014/COCO_val2014_000000556120.jpg",
+      "caption_index": 0,
+      "prompt": "A room is cluttered with suitcases and boxes."
+    },
+    {
+      "source_record_index": 3966,
+      "image_id": "val2014/COCO_val2014_000000035498.jpg",
+      "caption_index": 0,
+      "prompt": "A mouse sitting on the side of a computer monitor."
+    },
+    {
+      "source_record_index": 1483,
+      "image_id": "val2014/COCO_val2014_000000263828.jpg",
+      "caption_index": 0,
+      "prompt": "a black motorcycle is parked by the side of the road"
+    },
+    {
+      "source_record_index": 4110,
+      "image_id": "val2014/COCO_val2014_000000473340.jpg",
+      "caption_index": 0,
+      "prompt": "A brown park bench next to signs reading \"wildwood\" and \"danger.\""
+    }
+  ]
+}

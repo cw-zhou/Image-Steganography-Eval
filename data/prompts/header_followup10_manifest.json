@@ -1,0 +1,39 @@
+{
+  "scope": "Additional development comparison, not held-out final evaluation. Planned before observing these runs.",
+  "sampling_seed": 20261031,
+  "source": "baseline/scripts/test_prompts.txt",
+  "source_sha256": "cb8cc55d4f0ac0569836fa4c1e033372505fb31741819bb7729696f0e510b9c4",
+  "exclusions": "All old eval100 prompts and all 14 documented previous development prompts; whitespace collapse and casefold.",
+  "eligible_pool_size": 57,
+  "prompts": [
+    "The scent of freshly baked bread made my mouth water.",
+    "The smell of a fragrant candle created a relaxing ambiance.",
+    "The sound of waves crashing against the shore created a soothing and calming atmosphere.",
+    "The sight of a vibrant rainbow after the rain filled me with joy and wonder.",
+    "The scent of a blooming jasmine flower was enchanting.",
+    "The sight of a rainbow after the rain brought a smile to my face.",
+    "The scent of a blooming cherry blossom tree filled the air with sweetness.",
+    "The vibrant colors of the flowers danced in the garden.",
+    "The scent of freshly baked cookies filled the kitchen.",
+    "The sight of a colorful sunset painted the sky in vibrant hues."
+  ],
+  "batches": [
+    {
+      "file": "header_followup10_a.txt",
+      "seed": 74000,
+      "cases": 5
+    },
+    {
+      "file": "header_followup10_b.txt",
+      "seed": 74005,
+      "cases": 5
+    }
+  ],
+  "methods": [
+    "v3",
+    "header_randomized"
+  ],
+  "payload_bits": 8192,
+  "header_mask_seed": 20261028,
+  "policy": "Run both batches regardless of first-batch outcome; preserve failures as zero. Compare against V3 only. No mask/algorithm/parameter changes. Aggregate 10 cases from raw results, not selected cases."
+}
