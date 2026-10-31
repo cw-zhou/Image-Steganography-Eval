@@ -1,0 +1,133 @@
+{
+  "scope": "Completed fixed 100-caption evaluation of frozen candidate. Project-selected data, not instructor-provided data or proof of independence from SD training.",
+  "validation": "All 200 rows, prompt/order hash, fixed candidate hashes in manifest, paired seeds, attack seeds, inversion seeds, means and course-formula totals verified. Local metadata audit does not independently verify server PNG/npy content.",
+  "methods": {
+    "baseline": {
+      "cases": 100,
+      "bpp": 0.0625,
+      "niqe": 3.623413588226574,
+      "acc": {
+        "clean": 0.9800396728515625,
+        "jpeg": 0.9190374755859375,
+        "awgn": 0.8448760986328125,
+        "mblur": 0.8919482421875
+      },
+      "parts": {
+        "capacity": 18.025129152044187,
+        "robustness": 38.52872721354167,
+        "niqe": 17.506345647093703
+      },
+      "score": 74.06020201267955,
+      "exact_messages": {
+        "clean": 0,
+        "jpeg": 0,
+        "awgn": 0,
+        "mblur": 0
+      },
+      "failures": {
+        "clean": 0,
+        "jpeg": 0,
+        "awgn": 0,
+        "mblur": 0
+      }
+    },
+    "payload_ecc": {
+      "cases": 100,
+      "bpp": 0.03125,
+      "niqe": 3.595258978315511,
+      "acc": {
+        "clean": 0.99814697265625,
+        "jpeg": 0.942269287109375,
+        "awgn": 0.8210498046875,
+        "mblur": 0.919224853515625
+      },
+      "parts": {
+        "capacity": 15.083114776232087,
+        "robustness": 39.41813151041667,
+        "niqe": 17.618964086737954
+      },
+      "score": 72.12021037338671,
+      "exact_messages": {
+        "clean": 98,
+        "jpeg": 58,
+        "awgn": 25,
+        "mblur": 36
+      },
+      "failures": {
+        "clean": 0,
+        "jpeg": 0,
+        "awgn": 5,
+        "mblur": 0
+      }
+    }
+  },
+  "ecc_minus_baseline_score": -1.9399916392928418,
+  "ecc_minus_baseline_parts": {
+    "capacity": -2.9420143758121,
+    "robustness": 0.889404296875,
+    "niqe": 0.11261843964425111
+  },
+  "failures": [
+    {
+      "method": "payload_ecc",
+      "case_number": 45,
+      "seed": 20261145,
+      "attack": "awgn",
+      "error": "长度头校验失败：攻击损坏超过当前冗余保护能力"
+    },
+    {
+      "method": "payload_ecc",
+      "case_number": 65,
+      "seed": 20261165,
+      "attack": "awgn",
+      "error": "长度头校验失败：攻击损坏超过当前冗余保护能力"
+    },
+    {
+      "method": "payload_ecc",
+      "case_number": 68,
+      "seed": 20261168,
+      "attack": "awgn",
+      "error": "长度头校验失败：攻击损坏超过当前冗余保护能力"
+    },
+    {
+      "method": "payload_ecc",
+      "case_number": 85,
+      "seed": 20261185,
+      "attack": "awgn",
+      "error": "长度头校验失败：攻击损坏超过当前冗余保护能力"
+    },
+    {
+      "method": "payload_ecc",
+      "case_number": 98,
+      "seed": 20261198,
+      "attack": "awgn",
+      "error": "长度头校验失败：攻击损坏超过当前冗余保护能力"
+    }
+  ],
+  "same_ecc_image_diagnostics": {
+    "clean": {
+      "available_cases": 100,
+      "raw_acc_on_successful_header_cases": 0.978233642578125,
+      "ecc_acc_on_successful_header_cases": 0.99814697265625,
+      "worsened_cases": 0
+    },
+    "jpeg": {
+      "available_cases": 100,
+      "raw_acc_on_successful_header_cases": 0.91618896484375,
+      "ecc_acc_on_successful_header_cases": 0.942269287109375,
+      "worsened_cases": 0
+    },
+    "awgn": {
+      "available_cases": 95,
+      "raw_acc_on_successful_header_cases": 0.8487998560855263,
+      "ecc_acc_on_successful_header_cases": 0.8642629523026316,
+      "worsened_cases": 0
+    },
+    "mblur": {
+      "available_cases": 100,
+      "raw_acc_on_successful_header_cases": 0.890955810546875,
+      "ecc_acc_on_successful_header_cases": 0.919224853515625,
+      "worsened_cases": 0
+    }
+  }
+}
